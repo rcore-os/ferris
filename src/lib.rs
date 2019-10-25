@@ -31,8 +31,8 @@ mod copy_wheel;
 pub use alloc_wheel::AllocWheel;
 pub use copy_wheel::CopyWheel;
 
-use std::hash::Hash;
 use std::fmt::Debug;
+use std::hash::Hash;
 use std::time::Duration;
 
 /// A resolution for a wheel in the hierarchy
@@ -45,7 +45,7 @@ pub enum Resolution {
     HundredMs,
     Sec,
     Min,
-    Hour
+    Hour,
 }
 
 pub trait Wheel<T: Eq + Hash + Debug + Clone> {
@@ -57,26 +57,26 @@ pub trait Wheel<T: Eq + Hash + Debug + Clone> {
 /// An entry in a InnerWheel
 #[derive(Debug, Clone)]
 struct Slot<T: Debug + Clone> {
-    pub entries: Vec<T>
+    pub entries: Vec<T>,
 }
 
 impl<T: Debug + Clone> Slot<T> {
     pub fn new() -> Slot<T> {
         Slot {
-            entries: Vec::new()
+            entries: Vec::new(),
         }
     }
 }
 
 /// A wheel at a single resolution
 struct InnerWheel<T: Debug + Clone> {
-    pub slots: Vec<Slot<T>>
+    pub slots: Vec<Slot<T>>,
 }
 
 impl<T: Debug + Clone> InnerWheel<T> {
     pub fn new(size: usize) -> InnerWheel<T> {
         InnerWheel {
-            slots: vec![Slot::new(); size]
+            slots: vec![Slot::new(); size],
         }
     }
 }
@@ -98,27 +98,27 @@ pub fn wheel_sizes(resolutions: &mut Vec<Resolution>) -> Vec<usize> {
                 if i == end {
                     1000
                 } else {
-                    match resolutions[i+1] {
+                    match resolutions[i + 1] {
                         Resolution::TenMs => 10,
                         Resolution::HundredMs => 100,
-                        _ => 1000
+                        _ => 1000,
                     }
                 }
-            },
+            }
             Resolution::TenMs => {
                 if i == end {
                     100
                 } else {
-                    match resolutions[i+1] {
+                    match resolutions[i + 1] {
                         Resolution::HundredMs => 10,
-                        _ => 100
+                        _ => 100,
                     }
                 }
-            },
+            }
             Resolution::HundredMs => 10,
             Resolution::Sec => 60,
             Resolution::Min => 60,
-            Resolution::Hour => 24
+            Resolution::Hour => 24,
         };
         sizes.push(wheel_size);
     }
@@ -131,25 +131,38 @@ mod tests {
 
     #[test]
     fn resolutions_sorted_and_deduped() {
-        let mut resolutions = vec![Resolution::Sec, Resolution::Min, Resolution::TenMs, Resolution::Min];
+        let mut resolutions = vec![
+            Resolution::Sec,
+            Resolution::Min,
+            Resolution::TenMs,
+            Resolution::Min,
+        ];
         let _ = wheel_sizes(&mut resolutions);
-        assert_eq!(vec![Resolution::TenMs, Resolution::Sec, Resolution::Min], resolutions);
+        assert_eq!(
+            vec![Resolution::TenMs, Resolution::Sec, Resolution::Min],
+            resolutions
+        );
     }
 
     #[test]
     fn wheel_sizes_correct() {
         let mut resolutions = vec![
             vec![Resolution::Ms, Resolution::TenMs, Resolution::Sec],
-            vec![Resolution::Ms, Resolution::HundredMs, Resolution::Sec, Resolution::Min],
+            vec![
+                Resolution::Ms,
+                Resolution::HundredMs,
+                Resolution::Sec,
+                Resolution::Min,
+            ],
             vec![Resolution::Ms, Resolution::Sec],
-            vec![Resolution::TenMs, Resolution::HundredMs, Resolution::Sec]
+            vec![Resolution::TenMs, Resolution::HundredMs, Resolution::Sec],
         ];
 
         let expected = vec![
             vec![10, 100, 60],
             vec![100, 10, 60, 60],
             vec![1000, 60],
-            vec![10, 10, 60]
+            vec![10, 10, 60],
         ];
 
         for (mut r, expected) in resolutions.iter_mut().zip(expected) {
