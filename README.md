@@ -9,13 +9,7 @@ Add the following to your `Cargo.toml`
 
 ```toml
 [dependencies]
-ferris = "0.1"
-```
-
-Add this to your crate root
-
-```rust
-extern crate ferris;
+ferris = "0.2"
 ```
 
 ### Description
