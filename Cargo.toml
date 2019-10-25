@@ -1,6 +1,7 @@
 [package]
 name = "ferris"
 version = "0.2.0"
+edition = "2018"
 description = "Hierarchical timer wheel"
 authors = ["Andrew J. Stone <andrew.j.stone.1@gmail.com>"]
 repository = "https://github.com/andrewjstone/ferris"
@@ -8,3 +9,4 @@ keywords = ["timer", "wheel"]
 license = "Apache-2.0"
 
 [dependencies]
+hashbrown = "0.6"

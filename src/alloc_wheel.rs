@@ -1,11 +1,12 @@
 use super::{wheel_sizes, InnerWheel, Resolution, Wheel};
-use std::collections::HashSet;
-use std::fmt::Debug;
-use std::hash::Hash;
-use std::iter::Iterator;
-use std::mem;
-use std::rc::{Rc, Weak};
-use std::time::Duration;
+use alloc::rc::{Rc, Weak};
+use alloc::vec::Vec;
+use core::fmt::Debug;
+use core::hash::Hash;
+use core::iter::Iterator;
+use core::mem;
+use core::time::Duration;
+use hashbrown::HashSet;
 
 /// This wheel requires an allocation for each timer as it creates an Rc<T> for its key. This allows
 /// the key to be stored in a global hashset that can be used for O(1) cancel. A `Weak<T>` is stored
@@ -160,8 +161,8 @@ impl<T: Eq + Hash + Debug + Clone> Wheel<T> for AllocWheel<T> {
 mod tests {
     use super::super::{Resolution, Wheel};
     use super::*;
-    use std::rc::Weak;
-    use std::time::Duration;
+    use alloc::rc::Weak;
+    use core::time::Duration;
 
     fn values() -> (Vec<Resolution>, Vec<Duration>, Vec<&'static str>) {
         let resolutions = vec![

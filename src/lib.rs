@@ -25,15 +25,22 @@
 //! And since the migration ddoesn't actually occur, we save cpu, and potentially
 //! extra allocations.
 
+#![no_std]
+#![feature(alloc)]
+
+#[macro_use]
+extern crate alloc;
+
 mod alloc_wheel;
 mod copy_wheel;
 
 pub use alloc_wheel::AllocWheel;
 pub use copy_wheel::CopyWheel;
 
-use std::fmt::Debug;
-use std::hash::Hash;
-use std::time::Duration;
+use alloc::vec::Vec;
+use core::fmt::Debug;
+use core::hash::Hash;
+use core::time::Duration;
 
 /// A resolution for a wheel in the hierarchy
 ///

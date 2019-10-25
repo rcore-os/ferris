@@ -1,10 +1,11 @@
 use super::{wheel_sizes, InnerWheel, Resolution, Wheel};
-use std::collections::HashSet;
-use std::fmt::Debug;
-use std::hash::Hash;
-use std::iter::Iterator;
-use std::mem;
-use std::time::Duration;
+use alloc::vec::Vec;
+use core::fmt::Debug;
+use core::hash::Hash;
+use core::iter::Iterator;
+use core::mem;
+use core::time::Duration;
+use hashbrown::HashSet;
 
 /// This wheel maintains a copy of the timer key in both the appropriate inner timer wheel slot and
 /// the global hashset. This does not require an allocation for each timer but may use more memory
@@ -149,7 +150,7 @@ impl<T: Eq + Hash + Debug + Clone> Wheel<T> for CopyWheel<T> {
 mod tests {
     use super::super::{Resolution, Wheel};
     use super::*;
-    use std::time::Duration;
+    use core::time::Duration;
 
     fn values() -> (Vec<Resolution>, Vec<Duration>, Vec<&'static str>) {
         let resolutions = vec![
